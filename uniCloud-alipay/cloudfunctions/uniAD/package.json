@@ -1,0 +1,7 @@
+{
+  "name": "uniAD",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

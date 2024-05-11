@@ -1,0 +1,148 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	
+	{
+		"path" : "pages/index_page/index_page",
+		"style" : 
+		{
+			
+			"navigationBarTitleText" : "随机刷题",
+			"enablePullDownRefresh" : true
+		}
+	},
+	{
+	    "path" : "pages/main/main",
+	    "style" :                                                                                    
+	    {
+	        "navigationBarTitleText": "贝壳刷题",
+	        "enablePullDownRefresh": false
+	    }
+		
+	    
+	},
+	
+	
+	
+	{
+		"path" : "pages/ad/ad",
+		"style" : 
+		{
+			"navigationBarTitleText" : "",
+			"enablePullDownRefresh" : false
+		}
+	},
+	
+
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "题目列表",
+				"enablePullDownRefresh": true
+				
+			}
+		},
+		
+		{
+            "path" : "pages/add/add",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "题目设置",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+        {
+        	"path" : "pages/addList/addList",
+        	"style" : 
+        	{
+        		"navigationBarTitleText" : "",
+        		"enablePullDownRefresh" : false
+        	}
+        },
+        {
+        	"path" : "pages/label/label",
+        	"style" : 
+        	{
+        		"navigationBarTitleText" : "",
+        		"enablePullDownRefresh" : false
+        	}
+        },
+    
+		{
+			"path" : "pages/list/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "题库",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/listque/listque",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"enablePullDownRefresh" : false
+			}
+		}
+     
+        ,{
+            "path" : "pages/me/me",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+        {
+        	"path" : "pages/picker/picker",
+        	"style" : 
+        	{
+        		"navigationBarTitleText" : "",
+        		"enablePullDownRefresh" : false
+        	}
+        },
+        {
+        	"path" : "pages/addOne/addOne",
+        	"style" : 
+        	{
+        		"navigationBarTitleText" : "",
+        		"enablePullDownRefresh" : false
+        	}
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	
+	"tabBar":{
+		"list":[
+			{
+				"pagePath":"pages/index_page/index_page",
+				"text":"随机刷题"
+			},
+			{
+				"pagePath":"pages/main/main",
+				"text":"题库刷题"
+			},
+
+			{
+				"pagePath":"pages/list/list",
+				"text":"题库"
+			},
+			{
+				"pagePath":"pages/addOne/addOne",
+				"text":"出题"
+			},
+			{
+				"pagePath":"pages/me/me",
+				"text":"我的"
+			}
+			
+		]
+	},
+	"uniIdRouter": {}
+}
