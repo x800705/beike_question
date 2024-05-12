@@ -139,19 +139,21 @@
 		
 		
 		async onPullDownRefresh() {
-			
+			console.log(123123)		
 			//获取随机数
 			await new Promise((resolve, reject) => {
 					uni.request({
 						url:this.url + "/getitemr?item_id=" + this.item_id,
 						success:(res)=>{
 							console.log("res")
+							console.log(res.data)
 							if(res.data == null){
 								uni.showToast({
 								    title: '该分类题库为空',  
 									icon: 'none',  
 								    duration: 2000 // 持续显示，直到手动隐藏  
 							});
+						}
 							
 							//初始化
 							this.is_click = 0;
@@ -166,7 +168,21 @@
 							this.chooseList = []
 							this.q = ""
 							
+							res = res.data
+							console.log(123123)			
+							console.log(res)
+							this.qid = res[0]
+							this.q = res[3]
+							this.chooseList = res.slice(4,8)
+							
+							console.log(res.slice(4,8))
+								
+							this.ans = res[8]
+							
+							
+							
 							uni.stopPullDownRefresh();
+							
 							
 							return
 							
@@ -175,7 +191,7 @@
 							
 							
 							
-						}
+						
 							console.log(res.data[0])
 							this.qid = res.data[0]
 							
@@ -188,21 +204,21 @@
 		
 			
 					
-			//初始化
-			this.is_click = 0;
-			this.is_pdis = 0;
+			// //初始化
+			// this.is_click = 0;
+			// this.is_pdis = 0;
 			
 			
-			this.chooseList = ["","","",""]; //选项选择
-			this.styleList = ["1","2","3","4"]; //样式选择
-			this.peaList = ["0","0","0","0"];
-			this.percentList = ["0%","0%","0%","0%"];
+			// this.chooseList = ["","","",""]; //选项选择
+			// this.styleList = ["1","2","3","4"]; //样式选择
+			// this.peaList = ["0","0","0","0"];
+			// this.percentList = ["0%","0%","0%","0%"];
 			
 			
 			
-			await this.getq() // 重新更新题目
+			//await this.getq() // 重新更新题目
 			
-			uni.stopPullDownRefresh();
+			//uni.stopPullDownRefresh();
 		},
 		
 		
@@ -340,13 +356,24 @@
 								this.q = ""
 								
 						
+						
 								
 								return 
 								
 							}
 							
-							console.log(res.data[0])
-							this.qid = res.data[0]
+							res = res.data
+						
+							console.log(res)
+							this.qid = res[0]
+							this.q = res[3]
+							this.chooseList = res.slice(4,8)
+							
+							console.log(res.slice(4,8))
+								
+							this.ans = res[8]
+							
+				
 							
 							
 							resolve('suc');  // 千万别忘写！！！
@@ -357,9 +384,14 @@
 				
 				
 				
+				
+				
+				
+				
+				
 	
 				//根据随机值查询题目
-				this.getq()
+				//this.getq()
 				
 				
 			},
