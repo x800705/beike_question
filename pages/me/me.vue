@@ -10,15 +10,16 @@
 	</view>
 	
 	<view v-else>
-		<image src="../../img/123.png" class="bg_pic"></image>
+		
+		<image class="bg_pic"></image>
 
-		<view>
-		<image class="cir_pic"src="../../img/123.png"></image>
-	
+		<view class="label">
+		<image class="cir_pic" src="../../img/123.png"></image>
+		<span class="username">东辉行动</span>
 		</view>
 		
-		<view>东辉行动</view>
 		
+		<!--
 		<uni-list class="list" @click="aaa()" >
 			
 
@@ -26,6 +27,16 @@
 		
 			
 		</uni-list>
+		
+		!-->
+		
+	
+		<uv-list>
+		    <uv-list-item title="我的出题" clickable></uv-list-item>
+			<uv-list-item title="历史做题记录" clickable></uv-list-item>
+			<uv-list-item title="我的收藏" clickable></uv-list-item>
+			<uv-list-item title="我的互动" clickable></uv-list-item>
+		</uv-list>
 		
 		<uv-button type="error" style="width:300px;margin:10px auto" @click="logout">退出登录</uv-button>
 	</view>
@@ -75,7 +86,9 @@
 				
 				if(code == "1"){
 					this.$store.state.isLoggedIn = true
+					this.$store.state.userId = this.id
 					sessionStorage.setItem('is_log', 'true');  
+					sessionStorage.setItem('user_id', this.id);  
 				}
 				
 				console.log(this.$store.state.isLoggedIn)
@@ -97,24 +110,36 @@
 
 <style>
 .bg_pic{
-	height:100px;
+	height:120px;
 	width:100%;
-	filter:blur(5px)
+	background-color: #9ACAFC;
 }
 
 .cir_pic{
 	width:80px;
 	height:80px;
 	border-radius: 50%;  
-
-	position: absolute;
-	top:20px
+	position: relative;
+	top:0px
 	
 }
 
 .list .test{
-	margin:20px 0
+	margin:0px 0
 }
 
+
+.label{
+	position: absolute;
+	display: flex;
+	top:0px;
+	margin:0px 10px;
+	top:20px;
+}
+
+.username{
+	font-size: 30px;
+	margin-left:20px;
+}
 
 </style>

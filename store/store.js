@@ -11,6 +11,8 @@ export default new Vuex.Store({
     // 用户信息（可选）  
     userInfo: null ,
 	
+	userId : null,
+	
 	url:"http://154.12.26.163:5000/"
   },  
   mutations: {  

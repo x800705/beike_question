@@ -79,6 +79,9 @@
 					总共作答{{total}}人,正确率为{{percentList[ans]}}
 				</view>
 				
+				<uv-icon v-if="is_star == false" name="star" color="#2979ff" size="28" @click="star"></uv-icon>
+				<uv-icon v-if="is_star == true" name="star-fill" color="#2979ff" size="28" @click="star"></uv-icon>
+				
 				
 				
 				
@@ -110,6 +113,7 @@
 
 <script>
 	import axios from 'axios'
+	import api from "../../api/api.js"
 	export default {
 		data() {
 			return {
@@ -134,12 +138,15 @@
 				//url:"http://localhost:5000/"
 				item_id:"-1", //类别id
 				list1: [],
+				is_star:false //是否收藏
 			}
 		},
 		
 		
 		async onPullDownRefresh() {
-			console.log(123123)		
+		
+			this.is_star = await api.get_is_star(sessionStorage.getItem('user_id'),this.qid)
+	
 			//获取随机数
 			await new Promise((resolve, reject) => {
 					uni.request({
@@ -178,6 +185,10 @@
 							console.log(res.slice(4,8))
 								
 							this.ans = res[8]
+							
+							
+							
+							
 							
 							
 							
@@ -774,6 +785,14 @@
 				
 				
 			},
+			
+			star(){
+				if(this.is_star == true) this.is_star = false
+				else {
+					api.get_star(sessionStorage.getItem('user_id'),this.qid)
+					this.is_star = true
+				}
+			}
 		    
 		}
 	}
