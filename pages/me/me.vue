@@ -32,11 +32,11 @@
 		
 	
 		<uv-list>
-		    <uv-list-item title="我的出题" clickable></uv-list-item>
+		    <uv-list-item title="我的出题" @click="linkTo()" clickable></uv-list-item>
 			<uv-list-item title="历史做题记录" clickable></uv-list-item>
-			<uv-list-item title="我的收藏" clickable></uv-list-item>
+			<uv-list-item title="我的收藏" @click="linkTo('../star/star')" clickable></uv-list-item>
 			<uv-list-item title="我的互动" clickable></uv-list-item>
-		</uv-list>
+		</uv-list> 
 		
 		<uv-button type="error" style="width:300px;margin:10px auto" @click="logout">退出登录</uv-button>
 	</view>
@@ -103,6 +103,16 @@
 			logout(){
 				sessionStorage.setItem('is_log', 'false');  
 				this.$store.state.isLoggedIn = false
+			},
+			
+			
+			//跳转网页
+			linkTo(url){
+				uni.navigateTo({
+					url:url
+				});
+				
+				
 			}
 		}
 	}

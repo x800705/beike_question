@@ -79,9 +79,12 @@
 					总共作答{{total}}人,正确率为{{percentList[ans]}}
 				</view>
 				
+				
+				<view class="star" style="display: flex;">
 				<uv-icon v-if="is_star == false" name="star" color="#2979ff" size="28" @click="star"></uv-icon>
 				<uv-icon v-if="is_star == true" name="star-fill" color="#2979ff" size="28" @click="star"></uv-icon>
-				
+				<view style="margin: 10px;">{{star_count}}</view>
+				</view>
 				
 				
 				
@@ -138,53 +141,86 @@
 				//url:"http://localhost:5000/"
 				item_id:"-1", //类别id
 				list1: [],
-				is_star:false //是否收藏
+				is_star:false ,//是否收藏
+				star_count:0, // 收藏人数
 			}
 		},
 		
 		
 		async onPullDownRefresh() {
 		
-			this.is_star = await api.get_is_star(sessionStorage.getItem('user_id'),this.qid)
+			//根据种类获取题目
+			var data = await api.getitemr(this.item_id)
+			
+			//初始化
+			this.is_click = 0;
+			this.is_pdis = 0;
+			
+			
+			this.chooseList = ["","","",""]; //选项选择
+			this.styleList = ["1","2","3","4"]; //样式选择
+			this.peaList = ["0","0","0","0"];
+			this.percentList = ["0%","0%","0%","0%"];
+			
+			this.chooseList = []
+			this.q = ""
+			
+			//设置题目
+			this.qid = data[0]
+			this.q = data[3]
+			this.chooseList = data.slice(4,8)	
+			this.ans = data[8]
+			this.star_count = data[14]
+			
+			//判断是否收藏
+			this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
+			
+			
+			
 	
-			//获取随机数
-			await new Promise((resolve, reject) => {
-					uni.request({
-						url:this.url + "/getitemr?item_id=" + this.item_id,
-						success:(res)=>{
-							console.log("res")
-							console.log(res.data)
-							if(res.data == null){
-								uni.showToast({
-								    title: '该分类题库为空',  
-									icon: 'none',  
-								    duration: 2000 // 持续显示，直到手动隐藏  
-							});
-						}
+	// 		//获取随机数
+	// 		await new Promise((resolve, reject) => {
+	// 				uni.request({
+	// 					url:this.url + "/getitemr?item_id=" + this.item_id,
+	// 					success:(res)=>{
+	// 						console.log("res")
+	// 						console.log(res.data)
+	// 						if(res.data == null){
+	// 							uni.showToast({
+	// 							    title: '该分类题库为空',  
+	// 								icon: 'none',  
+	// 							    duration: 2000 // 持续显示，直到手动隐藏  
+	// 						});
+	// 					}
 							
-							//初始化
-							this.is_click = 0;
-							this.is_pdis = 0;
+	// 						//初始化
+	// 						this.is_click = 0;
+	// 						this.is_pdis = 0;
 							
 							
-							this.chooseList = ["","","",""]; //选项选择
-							this.styleList = ["1","2","3","4"]; //样式选择
-							this.peaList = ["0","0","0","0"];
-							this.percentList = ["0%","0%","0%","0%"];
+	// 						this.chooseList = ["","","",""]; //选项选择
+	// 						this.styleList = ["1","2","3","4"]; //样式选择
+	// 						this.peaList = ["0","0","0","0"];
+	// 						this.percentList = ["0%","0%","0%","0%"];
 							
-							this.chooseList = []
-							this.q = ""
+	// 						this.chooseList = []
+	// 						this.q = ""
 							
-							res = res.data
-							console.log(123123)			
-							console.log(res)
-							this.qid = res[0]
-							this.q = res[3]
-							this.chooseList = res.slice(4,8)
+	// 						res = res.data
+	// 						console.log(123123)			
+	// 						console.log(res)
+	// 						this.qid = res[0]
+	// 						this.q = res[3]
+	// 						this.chooseList = res.slice(4,8)
 							
-							console.log(res.slice(4,8))
+	// 						console.log(res.slice(4,8))
 								
-							this.ans = res[8]
+	// 						this.ans = res[8]
+							
+							
+			
+							
+							
 							
 							
 							
@@ -195,7 +231,7 @@
 							uni.stopPullDownRefresh();
 							
 							
-							return
+							
 							
 							
 							
@@ -203,14 +239,17 @@
 							
 							
 						
-							console.log(res.data[0])
-							this.qid = res.data[0]
+							// console.log(res.data[0])
+							// this.qid = res.data[0]
 							
-							resolve('suc');  // 千万别忘写！！！
-						}
-					})
+							// resolve('suc');  // 千万别忘写！！！
+						// }
+				// 	})
 					
-				})
+				// })
+				
+				
+				
 			
 		
 			
@@ -332,7 +371,18 @@
 		methods: {
 			async click(a){
 				
-				//初始化
+			
+				
+				
+				//获取对应种类
+				console.log(a.id)
+				this.item_id = a.id
+				
+				
+				
+				//根据种类获取题目
+				var data = await api.getitemr(this.item_id)
+				
 				//初始化
 				this.is_click = 0;
 				this.is_pdis = 0;
@@ -346,52 +396,15 @@
 				this.chooseList = []
 				this.q = ""
 				
+				//设置题目
+				this.qid = data[0]
+				this.q = data[3]
+				this.chooseList = data.slice(4,8)	
+				this.ans = data[8]
+				this.star_count = data[14]
 				
-				//获取对应种类
-				console.log(a.id)
-				this.item_id = a.id
-				//根据种类查询随机值
-				await new Promise((resolve, reject) => {
-					uni.request({
-						url:this.url + "/getitemr?item_id=" + a.id,
-						success:(res)=>{
-							console.log(res.data)
-							if(res.data == null){
-								uni.showToast({
-								    title: '该分类题库为空',  
-									icon: 'none',  
-								    duration: 2000 // 持续显示，直到手动隐藏  
-								});
-								
-								this.chooseList = []
-								this.q = ""
-								
-						
-						
-								
-								return 
-								
-							}
-							
-							res = res.data
-						
-							console.log(res)
-							this.qid = res[0]
-							this.q = res[3]
-							this.chooseList = res.slice(4,8)
-							
-							console.log(res.slice(4,8))
-								
-							this.ans = res[8]
-							
-				
-							
-							
-							resolve('suc');  // 千万别忘写！！！
-						}
-					})
-					
-				})
+				//判断是否收藏
+				this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
 				
 				
 				
@@ -787,10 +800,18 @@
 			},
 			
 			star(){
-				if(this.is_star == true) this.is_star = false
+				if(this.is_star == true) {
+					api.drop_star(sessionStorage.getItem('user_id'),this.qid)
+					api.del_star(this.qid)
+					this.is_star = false
+					this.star_count = this.star_count - 1
+				}
 				else {
+					
 					api.get_star(sessionStorage.getItem('user_id'),this.qid)
+					api.add_star(this.qid)
 					this.is_star = true
+					this.star_count = this.star_count + 1
 				}
 			}
 		    

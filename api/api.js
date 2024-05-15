@@ -47,6 +47,7 @@ login(id,pwd){
 
 },
  
+//增加收藏
 get_star(user_id,qid){
 
 
@@ -84,6 +85,34 @@ get_star(user_id,qid){
 
 },
 
+//取消收藏
+drop_star(user_id,qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "drop_star",
+			data:{
+				user_id:user_id,
+				qid:qid
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+
+//是否收藏
 get_is_star(user_id,qid){
 	
 	var result = ""
@@ -113,6 +142,94 @@ get_is_star(user_id,qid){
 	
 	
 	
+},
+
+//根据种类获取题目
+getitemr(item_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "getitemr",
+			data:{
+				item_id:item_id
+			},
+			success: (res) => {
+				var result = res.data
+				if(result == null){
+					uni.showToast({
+						    title: '该分类题库为空',  
+							icon: 'none',  
+						    duration: 2000 // 持续显示，直到手动隐藏  
+					});
+				}
+				
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+	
+	return web
+},
+ 
+
+//增加收藏人数
+add_star(qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "add_star",
+			data:{
+				qid:qid
+			},
+			success: (res) => {
+				var result = res.data	
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+	
+	return web
+},
+ 
+ 
+//减少收藏人数
+del_star(qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "del_star",
+			data:{
+				qid:qid
+			},
+			success: (res) => {
+				var result = res.data	
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+	
+	return web
+},
+
+
+//获取收藏列表
+get_star_list(user_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "get_star_list",
+			data:{
+				user_id:user_id
+			},
+			success: (res) => {
+				var result = res.data	
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+	
+	return web
 }
  
 
