@@ -95,6 +95,7 @@
 
 <script>
 	import axios from 'axios'
+	import api from "../../api/api.js"
 	export default {
 		data() {
 			return {
@@ -113,8 +114,8 @@
 				total:0,
 				block:0, // block锁
 				url:"http://154.12.26.163:5000/",
-				que_list:[],
-				now_id:0,
+				que_list:[], 
+				now_id:"",
 				totol:0,
 				//url:"http://localhost:5000/"
 			}
@@ -157,31 +158,55 @@
 		},
 		
 		
-		async onLoad(options) {
-			//this.qid = this.$route.query.id
-			//获取url的id
-			this.qid = options.id
-			
-			
-			
-			//根据题库id，获取题目单
-			await this.get_list()
-			
-			
-			//设置下标变量，控制第几道题
-			this.now_id = 0
-			
-
-			
 		
+		async onLoad(options) {
+			
+			//收藏刷题
+			if(options.is_star == "true"){
+				this.que_list = await api.get_star_list(sessionStorage.getItem('user_id'))
+				this.now_id = parseInt(options.index)
+				this.totol = this.que_list.length
+				
+				console.log(this.que_list)
+				
+				//res = this.que_list[this.now_id][0]
+				this.q = this.que_list[this.now_id][3]
+				this.chooseList = this.que_list[this.now_id].slice(4,8)
+			
+				this.ans = this.que_list[this.now_id][8]
+				
+				
+				
+			}
 			
 			
-			
-			//发送请求 根据id来进行题目的渲染
-			await this.getq()
-			
-			console.log(this.que_list[this.now_id][0])
-			
+			else{
+				//this.qid = this.$route.query.id
+				//获取url的id
+				this.qid = options.id
+				
+				
+				
+				//根据题库id，获取题目单
+				await this.get_list()
+				
+				
+				//设置下标变量，控制第几道题
+				this.now_id = 0
+				
+				
+				
+						
+				
+				
+				
+				//发送请求 根据id来进行题目的渲染
+				await this.getq()
+				
+				console.log(this.que_list[this.now_id][0])
+				
+			}
+	
 		
 			
 			
