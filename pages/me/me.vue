@@ -3,7 +3,7 @@
 	<view v-if="this.$store.state.isLoggedIn == false">
 		<h2 style="text-align: center;">登录注册</h2>
 		<uv-input placeholder="请输入用户名" border="surround" v-model="id"  style="width: 200px; margin:10px auto"></uv-input>
-		<uv-input placeholder="请输入密码" border="surround" v-model="pwd"  style="width: 200px; margin:10px auto"></uv-input>
+		<uv-input type="password" placeholder="请输入密码" border="surround" v-model="pwd"  style="width: 200px; margin:10px auto"></uv-input>
 		
 		<uv-button type="success" style="width:300px;margin:10px auto" @click="submit">登录/注册</uv-button>
 		未注册的用户，自动注册
@@ -15,7 +15,7 @@
 
 		<view class="label">
 		<image class="cir_pic" src="../../img/123.png"></image>
-		<span class="username">东辉行动</span>
+		<span class="username">{{user_name}}</span>
 		</view>
 		
 		
@@ -53,12 +53,14 @@
 			return {
 				id:"",
 				pwd:"",
+				user_name:"",
 				
 			}
 		},
 		onLoad(){
 			
 			console.log(this.$store.state.isLoggedIn) 
+			this.user_name = sessionStorage.getItem('user_id')
 
 			if(sessionStorage.getItem('is_log') == 'true'){
 				this.$store.state.isLoggedIn = true
@@ -85,10 +87,12 @@
 				var code = await api.login(this.id,this.pwd)
 				
 				if(code == "1"){
+					
 					this.$store.state.isLoggedIn = true
 					this.$store.state.userId = this.id
 					sessionStorage.setItem('is_log', 'true');  
 					sessionStorage.setItem('user_id', this.id);  
+					this.user_name = this.id
 				}
 				
 				console.log(this.$store.state.isLoggedIn)
@@ -98,10 +102,11 @@
 				
 				
 				
-				
+				 
 			},
 			logout(){
 				sessionStorage.setItem('is_log', 'false');  
+				sessionStorage.setItem('user_id','')
 				this.$store.state.isLoggedIn = false
 			},
 			

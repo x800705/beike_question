@@ -1,5 +1,4 @@
 <template>
-	
 
 	<view>
 			
@@ -38,7 +37,7 @@
 
 
 
-			<text class="title" style="margin-top:80px">{{q}}</text> 
+			<text class="title" style="margin-top:40px">{{q}}</text> 
 			
 			  
 			
@@ -80,11 +79,25 @@
 				</view>
 				
 				
+				<view style="display: flex; margin: -10px;">
 				<view class="star" style="display: flex;">
 				<uv-icon v-if="is_star == false" name="star" color="#2979ff" size="28" @click="star"></uv-icon>
 				<uv-icon v-if="is_star == true" name="star-fill" color="#2979ff" size="28" @click="star"></uv-icon>
+				
+	
 				<view style="margin: 10px;">{{star_count}}</view>
+		
 				</view>
+				
+				
+				<view class="heart" style="margin-left: 100px;">
+				<uv-icon v-if="is_heart == false" name="heart" color="#2979ff" size="28" @click="heart"></uv-icon>
+				<uv-icon v-if="is_heart == true" name="heart-fill" color="#2979ff" size="28" @click="heart"></uv-icon>
+				<view style="margin: 10px;">{{heart_count}}</view>
+				</view>
+				
+				</view>
+				
 				
 				
 				
@@ -102,6 +115,18 @@
 			
 	</view>
 	
+	
+	<uv-list>
+	
+
+			<uv-list-item title="评论区" link to="/pages/comment/comment" @click="($event,1)"></uv-list-item>
+
+	</uv-list>
+	
+
+	
+	
+
 	<!--
 	<text style="display: inline-block;">
 		<button style="margin-left:0;width: 150px;display: inline-block;" @click="pre()">上一题</button>
@@ -142,7 +167,9 @@
 				item_id:"-1", //类别id
 				list1: [],
 				is_star:false ,//是否收藏
+				is_heart:false,//是否点赞
 				star_count:0, // 收藏人数
+				heart_count:0 // 点赞人数
 			}
 		},
 		
@@ -171,9 +198,11 @@
 			this.chooseList = data.slice(4,8)	
 			this.ans = data[8]
 			this.star_count = data[14]
+			this.heart_count = data[15]
 			
 			//判断是否收藏
 			this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
+			this.is_heart = false
 			
 			
 			
@@ -402,9 +431,11 @@
 				this.chooseList = data.slice(4,8)	
 				this.ans = data[8]
 				this.star_count = data[14]
+				this.heart_count = data[15]
 				
 				//判断是否收藏
 				this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
+				this.is_heart = false
 				
 				
 				
@@ -800,6 +831,15 @@
 			},
 			
 			star(){
+				
+				if(sessionStorage.getItem('user_id') == ''){
+				  uni.showToast({
+				      title: '请登录后重试',  
+				      icon: 'none', // 可以是 'success', 'loading', 'none'  
+				      duration: 1000 // 持续展示时间，单位 ms  
+				  });
+				  return
+				}
 				if(this.is_star == true) {
 					api.drop_star(sessionStorage.getItem('user_id'),this.qid)
 					api.del_star(this.qid)
@@ -812,6 +852,30 @@
 					api.add_star(this.qid)
 					this.is_star = true
 					this.star_count = this.star_count + 1
+				}
+			},
+			
+			heart(){
+				if(sessionStorage.getItem('user_id') == ''){
+				  uni.showToast({
+				      title: '请登录后重试',  
+				      icon: 'none', // 可以是 'success', 'loading', 'none'  
+				      duration: 1000 // 持续展示时间，单位 ms  
+				  });
+				  return
+				}
+				
+				if(this.is_heart == true) {
+					api.drop_heart(this.qid)
+					this.is_heart = false
+					this.heart_count = this.heart_count - 1
+				}
+				else {
+					
+					
+					api.add_heart(this.qid)
+					this.is_heart = true
+					this.heart_count = this.heart_count + 1
 				}
 			}
 		    
@@ -906,6 +970,10 @@
 	
 	button{
 		width:200px
+	
+	}
+	.content-container::-webkit-scrollbar {  
+	    display: none; /* 隐藏滚动条 */  
 	}
 	
 </style>

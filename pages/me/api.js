@@ -7,7 +7,7 @@ function a(){
 
 export default {
 	
-login(id,pwd){
+login(id,pwd){ 
 	console.log(id)
 	console.log(pwd)
 }	 
