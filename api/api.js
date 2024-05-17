@@ -230,7 +230,56 @@ get_star_list(user_id){
 	
 	
 	return web
-}
+},
+
+
+//点赞
+add_heart(qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "add_heart",
+			data:{
+				qid:qid
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+//取消点赞
+drop_heart(qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "drop_heart",
+			data:{
+				qid:qid
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
  
 
 }
