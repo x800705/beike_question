@@ -170,10 +170,10 @@
 				console.log(this.que_list)
 				
 				//res = this.que_list[this.now_id][0]
-				this.q = this.que_list[this.now_id][3]
-				this.chooseList = this.que_list[this.now_id].slice(4,8)
+				this.q = this.que_list[this.now_id][4]
+				this.chooseList = this.que_list[this.now_id].slice(5,9)
 			
-				this.ans = this.que_list[this.now_id][8]
+				this.ans = this.que_list[this.now_id][9]
 				
 				
 				
@@ -253,12 +253,12 @@
 						success: (res) => {
 							
 							res = res.data[0]
-							this.q = res[3]
-							this.chooseList = res.slice(4,8)
+							this.q = res[4]
+							this.chooseList = res.slice(5,9)
 							
-							console.log(res.slice(4,8))
+							console.log(res.slice(5,9))
 								
-							this.ans = res[8]
+							this.ans = res[9]
 							
 							
 				

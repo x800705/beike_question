@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<uv-list v-for="(item,index) in star_list" :key="index">
-			<uv-list-item :title="item[3]" @click="toStar(index)" clickable></uv-list-item>
+			<uv-list-item :title="item[4]" @click="toStar(index)" clickable></uv-list-item>
 		</uv-list>
 	</view>
 </template>

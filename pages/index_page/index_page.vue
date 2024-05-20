@@ -121,9 +121,11 @@
 	<uv-list>
 	
 
-			<uv-list-item title="评论区"  @click="link_comment()" clickable link></uv-list-item>
+			<uv-list-item title="评论区"  @click="link_comment()" clickable link style="padding:10px 10px;background-color: rgb(230, 230, 230);">
+				<view >评论区</view>
+			</uv-list-item>
 
-	</uv-list>
+	</uv-list> 
 	
 
 	
@@ -861,7 +863,7 @@
 					//增加收藏人数
 					api.add_star(this.qid)
 					//添加互动表
-					api.react(this.q_user_id,this.user_id)
+					api.react(this.q_user_id,this.user_id,this.qid,"star")
 					
 					this.is_star = true
 					this.star_count = this.star_count + 1
@@ -885,8 +887,10 @@
 				}
 				else {
 					
-					
+					//添加点赞数
 					api.add_heart(this.qid)
+					//添加互动表
+					api.react(this.q_user_id,this.user_id,this.qid,"heart")
 					this.is_heart = true
 					this.heart_count = this.heart_count + 1
 				}
@@ -998,5 +1002,14 @@
 	.content-container::-webkit-scrollbar {  
 	    display: none; /* 隐藏滚动条 */  
 	}
+	
+	.uv-list-item__content-title{
+		font-size:100px
+	}
+	
+	.uv-list-item{
+		background-color: #007AFF;
+	}
+	
 	
 </style>

@@ -337,13 +337,15 @@ get_comment(qid){
 
 
 //添加互动
-react(get_id,push_id){
+react(get_id,push_id,qid,type){
 	var web = new Promise((resolve, reject) => {
 		uni.request({
 			url: url + "react",
 			data:{
 				get_id:get_id,
 				push_id:push_id,
+				qid:qid,
+				type:type,
 
 			},
 			success: (res) => {
@@ -362,6 +364,86 @@ react(get_id,push_id){
 
 },
 
+
+
+
+//获取互动
+get_react(user_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "get_react",
+			data:{
+				user_id:user_id
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+
+//获取未读信息
+count_react(user_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "count_react",
+			data:{
+				user_id:user_id
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+//设为已读
+is_read(user_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "is_read",
+			data:{
+				user_id:user_id
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
 
 
  

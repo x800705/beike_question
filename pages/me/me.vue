@@ -35,7 +35,7 @@
 		    <uv-list-item title="我的出题" @click="linkTo()" clickable link></uv-list-item>
 			<uv-list-item title="历史做题记录" clickable link></uv-list-item>
 			<uv-list-item title="我的收藏" @click="linkTo('../star/star')" clickable link></uv-list-item>
-			<uv-list-item title="我的互动" @click="linkTo('../react/react')" clickable link></uv-list-item>
+			<uv-list-item title="我的互动" @click="linkToReact()" clickable link :show-badge="true" :badge="{value: this.count}"></uv-list-item>
 		</uv-list> 
 		
 		<uv-button type="error" style="width:300px;margin:10px auto" @click="logout">退出登录</uv-button>
@@ -54,11 +54,15 @@
 				id:"",
 				pwd:"",
 				user_name:"",
+				count:"", //未读信息
 				
 			}
 		},
-		onLoad(){
+		async onShow(){
 			
+			this.count = await api.count_react(this.user_name)
+			this.count = this.count[0][0]
+			console.log(this.count)
 			console.log(this.$store.state.isLoggedIn) 
 			this.user_name = sessionStorage.getItem('user_id')
 
@@ -93,6 +97,8 @@
 					sessionStorage.setItem('is_log', 'true');  
 					sessionStorage.setItem('user_id', this.id);  
 					this.user_name = this.id
+					this.count = await api.count_react(this.user_name)
+					this.count = this.count[0][0]
 				}
 				
 				console.log(this.$store.state.isLoggedIn)
@@ -118,6 +124,13 @@
 				});
 				
 				
+			},
+			async linkToReact(){
+				api.is_read(this.user_name)
+				
+				uni.navigateTo({
+					url:'../react/react'
+				})
 			}
 		}
 	}
