@@ -280,6 +280,90 @@ drop_heart(qid){
 	
 
 },
+
+
+//发表评论
+push_comment(qid,user_id,content){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "push_comment",
+			data:{
+				qid:qid,
+				user_id:user_id,
+				content:content
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+
+//获取评论
+get_comment(qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "get_comment",
+			data:{
+				qid:qid,
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+//添加互动
+react(get_id,push_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "react",
+			data:{
+				get_id:get_id,
+				push_id:push_id,
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+
  
 
 }

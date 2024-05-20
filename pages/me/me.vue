@@ -32,10 +32,10 @@
 		
 	
 		<uv-list>
-		    <uv-list-item title="我的出题" @click="linkTo()" clickable></uv-list-item>
-			<uv-list-item title="历史做题记录" clickable></uv-list-item>
-			<uv-list-item title="我的收藏" @click="linkTo('../star/star')" clickable></uv-list-item>
-			<uv-list-item title="我的互动" clickable></uv-list-item>
+		    <uv-list-item title="我的出题" @click="linkTo()" clickable link></uv-list-item>
+			<uv-list-item title="历史做题记录" clickable link></uv-list-item>
+			<uv-list-item title="我的收藏" @click="linkTo('../star/star')" clickable link></uv-list-item>
+			<uv-list-item title="我的互动" @click="linkTo('../react/react')" clickable link></uv-list-item>
 		</uv-list> 
 		
 		<uv-button type="error" style="width:300px;margin:10px auto" @click="logout">退出登录</uv-button>

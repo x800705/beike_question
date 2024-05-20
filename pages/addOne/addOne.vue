@@ -60,12 +60,14 @@
 				columns: [],
 			    item_list_id:[],
 				item:"",
-				item_id:""
+				item_id:"",
+				user_id:"",
 			}
 		},
 		async onShow(options) {
 			//获取itema
 			//获取item
+			this.user_id = sessionStorage.getItem('user_id')
 			console.log(123)
 			this.columns = []
 			this.item_list_id = []
@@ -124,6 +126,7 @@
 						data: {
 							que: this.que,
 							item_id : this.item_id,
+							user_id : this.user_id,
 							a: this.a,
 							b: this.b,
 							c: this.c,

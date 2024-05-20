@@ -16,6 +16,8 @@
 			</view>
 			
 			
+			
+			
 			<view style="text-align: center;">下拉随机Duang一题</view>
 			
 			<!--
@@ -119,7 +121,7 @@
 	<uv-list>
 	
 
-			<uv-list-item title="评论区" link to="/pages/comment/comment" @click="($event,1)"></uv-list-item>
+			<uv-list-item title="评论区"  @click="link_comment()" clickable link></uv-list-item>
 
 	</uv-list>
 	
@@ -169,7 +171,9 @@
 				is_star:false ,//是否收藏
 				is_heart:false,//是否点赞
 				star_count:0, // 收藏人数
-				heart_count:0 // 点赞人数
+				heart_count:0 ,// 点赞人数
+				q_user_id:"", //出题人id
+				user_id:"", //登录人id
 			}
 		},
 		
@@ -194,11 +198,12 @@
 			
 			//设置题目
 			this.qid = data[0]
-			this.q = data[3]
-			this.chooseList = data.slice(4,8)	
-			this.ans = data[8]
-			this.star_count = data[14]
-			this.heart_count = data[15]
+			this.q_user_id = data[3]
+			this.q = data[4]
+			this.chooseList = data.slice(5,9)	
+			this.ans = data[9]
+			this.star_count = data[15]
+			this.heart_count = data[16]
 			
 			//判断是否收藏
 			this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
@@ -306,6 +311,9 @@
 			//获取url的id
 			
 			console.log(123)
+			
+			//获取登录人id
+			this.user_id = sessionStorage.getItem('user_id');
 			
 		
 			
@@ -427,11 +435,12 @@
 				
 				//设置题目
 				this.qid = data[0]
-				this.q = data[3]
-				this.chooseList = data.slice(4,8)	
-				this.ans = data[8]
-				this.star_count = data[14]
-				this.heart_count = data[15]
+				this.q_user_id = data[3]
+				this.q = data[4]
+				this.chooseList = data.slice(5,9)	
+				this.ans = data[9]
+				this.star_count = data[15]
+				this.heart_count = data[16]
 				
 				//判断是否收藏
 				this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
@@ -464,12 +473,12 @@
 						success: (res) => {
 							
 							res = res.data[0]
-							this.q = res[3]
-							this.chooseList = res.slice(4,8)
+							this.q = res[4]
+							this.chooseList = res.slice(5,9)
 							
-							console.log(res.slice(4,8))
+							console.log(res.slice(5,9))
 								
-							this.ans = res[8]
+							this.ans = res[9]
 							
 							
 				
@@ -847,9 +856,13 @@
 					this.star_count = this.star_count - 1
 				}
 				else {
-					
+					//添加到收藏表
 					api.get_star(sessionStorage.getItem('user_id'),this.qid)
+					//增加收藏人数
 					api.add_star(this.qid)
+					//添加互动表
+					api.react(this.q_user_id,this.user_id)
+					
 					this.is_star = true
 					this.star_count = this.star_count + 1
 				}
@@ -877,7 +890,17 @@
 					this.is_heart = true
 					this.heart_count = this.heart_count + 1
 				}
+			},
+			
+			link_comment(){
+				console.log(this.qid)
+				uni.navigateTo({
+					url:'../comment/comment?qid=' + this.qid
+				});
+			
 			}
+			
+			
 		    
 		}
 	}
