@@ -280,6 +280,56 @@ drop_heart(qid){
 	
 
 },
+
+//获取评论
+
+get_comment(qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "get_comment",
+			data:{
+				qid:qid
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+//发布评论
+push_comment(qid,content){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "push_comment",
+			data:{
+				qid:qid,
+				content:content
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
  
 
 }
