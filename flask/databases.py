@@ -8,7 +8,7 @@ import json
 from flask_cors import CORS
 from time import localtime, strftime  
 import datetime
-import uuid
+import uuid 
 import pandas as pd
 
 
@@ -208,6 +208,7 @@ def addOne():
     cursor = db.cursor()
     que = request.values.get("que")
     iid = request.values.get("item_id")
+    user_id = request.values.get("user_id")
     a = request.values.get("a")
     b = request.values.get("b")
     c = request.values.get("c")
@@ -215,7 +216,7 @@ def addOne():
     ans = request.values.get("ans")
     #sql = "INSERT INTO que (que,a,b,c,d,ans) values(%s,%s,%s,%s,%s,%s)",(que,a,b,c,d,ans,)
 	
-    cursor.execute("REPLACE into que(que,item_id,a,b,c,d,ans) values(%s,%s,%s,%s,%s,%s,%s)",(que,iid,a,b,c,d,ans))
+    cursor.execute("REPLACE into que(que,item_id,user_id,a,b,c,d,ans) values(%s,%s,%s,%s,%s,%s,%s,%s)",(que,iid,user_id,a,b,c,d,ans,))
     #print(sql)
     
     #cursor.execute(sql)
@@ -411,7 +412,7 @@ def getitemr():
     if(list_id == "-1"):
         cursor.execute("SELECT * from que order by rand() limit 1")
     else:
-        cursor.execute("SELECT * from que where item_id = (%s) order by rand() limit 1 ",(list_id))
+        cursor.execute("SELECT * from que where item_id = (%s) order by rand() limit 1 ",(list_id,))
 	
  
    
@@ -441,8 +442,9 @@ def logins():
     
         #存在用户 登录
     if cursor.rowcount == 1:
+        
         #判断用户密码是否正确
-        cursor.execute("SELECT * from user where id = (%s) and pwd = (%s)",(id,pwd))
+        cursor.execute("SELECT * from user where id = (%s) and pwd = (%s)",(id,pwd,))
         data = cursor.fetchall()
         if cursor.rowcount == 1:
             return "1"
@@ -579,5 +581,228 @@ def get_star_list():
 	
     return 
     
+    
+    
+
+#增加收藏人数
+@app.route('/add_heart', methods=['GET', 'POST'])      
+def add_heart():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    qid = request.values.get("qid")
+
+    
+    cursor.execute("update que set heart = heart + 1 where id = {}".format(qid))
+    
+    
+    db.commit()
+	
+	
+	
+    return "200"
+    
+
+#取消收藏
+@app.route('/drop_heart', methods=['GET', 'POST'])      
+def drop_heart():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    qid = request.values.get("qid")
+
+    
+    cursor.execute("update que set heart = heart - 1 where id = {}".format(qid))
+    
+    
+    db.commit()
+	
+	
+	
+    return "200"
+    
+    
+#提交评论
+@app.route('/push_comment', methods=['GET', 'POST'])      
+def push_comment():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    qid = request.values.get("qid")
+    user_id = request.values.get("user_id")
+    content = request.values.get("content")
+
+    
+    cursor.execute("insert into comment(qid,user_id,content) values(%s,%s,%s)",(qid,user_id,content,))
+    
+    
+    db.commit()
+	
+	
+	
+    return "200"
+    
+    
+#获取评论
+@app.route('/get_comment', methods=['GET', 'POST'])      
+def get_comment():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    qid = request.values.get("qid")
+
+
+    #多级查询
+    #select (select pwd from user where id = user_id),content from comment where qid = 23
+    cursor.execute("select user_id,content from comment where qid = %s ORDER by id desc",(qid,))
+    
+    
+    data = cursor.fetchall()
+
+	
+	
+    return json.dumps(data)
+    
+    
+
+#添加互动
+@app.route('/react', methods=['GET', 'POST'])      
+def react():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    get_id = request.values.get("get_id")
+    push_id = request.values.get("push_id")
+    qid = request.values.get("qid")
+    type = request.values.get("type")
+    
+    
+    
+
+    #多级查询
+    #select (select pwd from user where id = user_id),content from comment where qid = 23
+    cursor.execute("insert into react(get_id,push_id,qid,type) values(%s,%s,%s,%s)",(get_id,push_id,qid,type,))
+    
+    
+    db.commit()
+
+	
+	
+    return "200"
+  
+  
+#评论互动
+@app.route('/react_comment', methods=['GET', 'POST'])      
+def react_comment():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    get_id = request.values.get("get_id")
+    push_id = request.values.get("push_id")
+    qid = request.values.get("qid")
+    content = request.values.get("content")
+    type = request.values.get("type")
+    
+    
+    
+
+    #多级查询
+    #select (select pwd from user where id = user_id),content from comment where qid = 23
+    cursor.execute("insert into react(get_id,push_id,qid,content,type) values(%s,%s,%s,%s,%s)",(get_id,push_id,qid,content,type,))
+    
+    
+    db.commit()
+
+	
+	
+    return "200"
+    
+    
+  
+#获取互动  
+@app.route('/get_react', methods=['GET', 'POST'])      
+def get_react():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    user_id = request.values.get("user_id")
+  
+    
+    
+    
+
+    #多级查询
+    #select (select pwd from user where id = user_id),content from comment where qid = 23
+    
+    #select push_id,(select que from que where id = qid) from react where get_id = "老学长"
+    cursor.execute("select push_id,type,(select que from que where id = qid),content from react where get_id = %s  order by id desc",(user_id,))
+    
+    
+    data = cursor.fetchall()
+
+	
+	
+    return json.dumps(data)
+    
+    
+#获取未读信息
+@app.route('/count_react', methods=['GET', 'POST'])      
+def count_react():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    user_id = request.values.get("user_id")
+  
+    
+    
+    
+
+    #多级查询
+    #select (select pwd from user where id = user_id),content from comment where qid = 23
+    
+    #select push_id,(select que from que where id = qid) from react where get_id = "老学长"
+    cursor.execute("select count(*) from react where get_id = %s and is_read = 0",(user_id,))
+    
+    
+    data = cursor.fetchall()
+
+	
+	
+    return json.dumps(data)
+    
+    
+#获取未读信息
+@app.route('/is_read', methods=['GET', 'POST'])      
+def is_read():
+    db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+    cursor = db.cursor()
+    
+    
+    user_id = request.values.get("user_id")
+  
+    
+    
+    
+
+    #多级查询
+    #select (select pwd from user where id = user_id),content from comment where qid = 23
+    
+    #select push_id,(select que from que where id = qid) from react where get_id = "老学长"
+    cursor.execute("update react set is_read = 1 where get_id = %s",(user_id,))
+    
+    
+    db.commit()
+
+	
+	
+    return "200"
 if __name__ == '__main__':  
     app.run(host='0.0.0.0',port=5000,debug=True)

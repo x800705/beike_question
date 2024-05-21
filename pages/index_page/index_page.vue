@@ -16,6 +16,8 @@
 			</view>
 			
 			
+			
+			
 			<view style="text-align: center;">下拉随机Duang一题</view>
 			
 			<!--
@@ -33,11 +35,15 @@
 
 	
 	
-	<view class="content">
+	<view class="content" style="margin-bottom: 20px;">
 
 
-
-			<text class="title" style="margin-top:40px">{{q}}</text> 
+			
+			
+			<text class="title" style="margin-top:40px">
+				
+				<view>{{q}}</view>
+			</text> 
 			
 			  
 			
@@ -99,7 +105,7 @@
 				</view>
 				
 				
-				
+				<view style="color: gray; font-size: 15px; text-align: left;position: relative;top:-10px">本题由 {{q_user_id}} 提供</view>
 				
 	
 			</view>
@@ -119,9 +125,11 @@
 	<uv-list>
 	
 
-			<uv-list-item title="评论区" link to="/pages/comment/comment" @click="($event,1)"></uv-list-item>
+			<uv-list-item title="评论区"  @click="link_comment()" clickable link style="padding:10px 10px;background-color: rgb(230, 230, 230);width:100%;position: fixed;bottom: 50px;">
+				<view >评论区</view>
+			</uv-list-item>
 
-	</uv-list>
+	</uv-list> 
 	
 
 	
@@ -169,7 +177,9 @@
 				is_star:false ,//是否收藏
 				is_heart:false,//是否点赞
 				star_count:0, // 收藏人数
-				heart_count:0 // 点赞人数
+				heart_count:0 ,// 点赞人数
+				q_user_id:"", //出题人id
+				user_id:"", //登录人id
 			}
 		},
 		
@@ -194,11 +204,12 @@
 			
 			//设置题目
 			this.qid = data[0]
-			this.q = data[3]
-			this.chooseList = data.slice(4,8)	
-			this.ans = data[8]
-			this.star_count = data[14]
-			this.heart_count = data[15]
+			this.q_user_id = data[3]
+			this.q = data[4]
+			this.chooseList = data.slice(5,9)	
+			this.ans = data[9]
+			this.star_count = data[15]
+			this.heart_count = data[16]
 			
 			//判断是否收藏
 			this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
@@ -306,6 +317,9 @@
 			//获取url的id
 			
 			console.log(123)
+			
+			//获取登录人id
+			this.user_id = sessionStorage.getItem('user_id');
 			
 		
 			
@@ -427,11 +441,12 @@
 				
 				//设置题目
 				this.qid = data[0]
-				this.q = data[3]
-				this.chooseList = data.slice(4,8)	
-				this.ans = data[8]
-				this.star_count = data[14]
-				this.heart_count = data[15]
+				this.q_user_id = data[3]
+				this.q = data[4]
+				this.chooseList = data.slice(5,9)	
+				this.ans = data[9]
+				this.star_count = data[15]
+				this.heart_count = data[16]
 				
 				//判断是否收藏
 				this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
@@ -464,12 +479,12 @@
 						success: (res) => {
 							
 							res = res.data[0]
-							this.q = res[3]
-							this.chooseList = res.slice(4,8)
+							this.q = res[4]
+							this.chooseList = res.slice(5,9)
 							
-							console.log(res.slice(4,8))
+							console.log(res.slice(5,9))
 								
-							this.ans = res[8]
+							this.ans = res[9]
 							
 							
 				
@@ -847,9 +862,13 @@
 					this.star_count = this.star_count - 1
 				}
 				else {
-					
+					//添加到收藏表
 					api.get_star(sessionStorage.getItem('user_id'),this.qid)
+					//增加收藏人数
 					api.add_star(this.qid)
+					//添加互动表
+					api.react(this.q_user_id,this.user_id,this.qid,"star")
+					
 					this.is_star = true
 					this.star_count = this.star_count + 1
 				}
@@ -872,12 +891,24 @@
 				}
 				else {
 					
-					
+					//添加点赞数
 					api.add_heart(this.qid)
+					//添加互动表
+					api.react(this.q_user_id,this.user_id,this.qid,"heart")
 					this.is_heart = true
 					this.heart_count = this.heart_count + 1
 				}
+			},
+			
+			link_comment(){
+				console.log(this.q_user_id)
+				uni.navigateTo({
+					url:'../comment/comment?qid=' + this.qid +"&q_user_id=" + this.q_user_id
+				});
+			
 			}
+			
+			
 		    
 		}
 	}
@@ -975,5 +1006,14 @@
 	.content-container::-webkit-scrollbar {  
 	    display: none; /* 隐藏滚动条 */  
 	}
+	
+	.uv-list-item__content-title{
+		font-size:100px
+	}
+	
+	.uv-list-item{
+		background-color: #007AFF;
+	}
+	
 	
 </style>

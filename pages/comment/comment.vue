@@ -1,17 +1,17 @@
 <template>
-	<view>
-		<view style="">
-			<h4>评论</h4>
-			
-			<view style="padding:10px 0px">
-			<uv-list  style="padding-top: 20px;" v-for="(item,index) in comment_list" :key="index">
-				
-				<uv-list-item>{{item}}</uv-list-item>
-	
+	<view style="z-index=2">
+		<view class="list">
+			<uv-list  v-for="(item,index) in comment_list" :key="index">
+				<view style="padding-top: 20px;">
+					<view style="color:gray;font-size: 12px;">{{item[0]}}</view>
+					<view>{{item[1]}}</view>
+				</view>
 				
 				
 			</uv-list>
-			</view>
+			
+
+			
 		
 		
 		
@@ -20,43 +20,85 @@
 		<!--评论输入框 !-->
 		<view style="position: fixed; bottom:0px; width:100%;display: flex; ">
 			
-		<uv-input type="textarea" placeholder="输入评论" style="width: 80%;" v-model="content"></uv-input>
-		<uv-button type="success" style="width: 20%;" @click="submit()">提交</uv-button>
+		<uv-input placeholder="输入评论" style="width: 80%;z-index: 10; background-color: #e3e3e3;" v-model="content" ></uv-input>
+		<uv-button type="success" style="width: 20%;" @click="push_commit()">提交</uv-button>
+		
 			
 		</view>
 		
 	</view>
 </template>
-
 <script>
 	import api from "../../api/api.js"
+	import config from "../../api/config.js"
 	export default {
 		data() {
 			return {
 				qid:"",
-				comment_list : [123,132,1321,1],
-				content:"",
 				user_id:"",
+				content:"",
+				comment_list:[],
+				q_user_id:"",
 			}
 		},
-		onLoad(options){
-			this.qid = options.qid
-			this.user_id = sessionStorage.getItem("user_id")
-			//根据qid获取所有评论
-			//预想 -- 用户名 头像 评论内容 
-			//this.comment_list = api.get_comment(this.qid)
+		onLoad(res){
+			this.user_id = sessionStorage.getItem('user_id')
+			this.qid = res.qid
+			this.q_user_id = res.q_user_id
 			
-			
+			this.get_commit()
 			
 		},
 		methods: {
-			submit(){
-				api.push_comment(this.qid,this.content)
+			async push_commit(){
+				if(this.user_id == "") {
+					config.alerts("请登录后重试")
+				}
+				console.log(this.content)
+				var data = await api.push_comment(this.qid,this.user_id,this.content)
+				if(data == "200"){
+					config.success_alerts("已发送")
+					
+					//添加互动 get_id,push_id,qid,type
+					api.react_comment(this.q_user_id,this.user_id,this.qid,this.content,"comment")
+					//更新评论 
+					this.content = ""
+					this.get_commit()
+				}
+				else{
+					config.alerts("发送失败")
+				}
+				
+				
+			},
+			
+			async get_commit(){
+				this.comment_list = await api.get_comment(this.qid)
 			}
+			
+			
+			
 		}
 	}
-</script> 
+</script>
 
 <style>
+.list{
+	padding-bottom:50px;
+
+}
+
+.uv-list-item__container{
+	margin-top:50px;
+}
+
+
+
+.input-placeholder {
+		color: #7A869A !important;
+	}
+	
+	
+
 
 </style>

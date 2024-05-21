@@ -281,38 +281,15 @@ drop_heart(qid){
 
 },
 
-//获取评论
 
-get_comment(qid){
-	var web = new Promise((resolve, reject) => {
-		uni.request({
-			url: url + "get_comment",
-			data:{
-				qid:qid
-			},
-			success: (res) => {
-				var result = res.data
-	
-				
-				resolve(result);  // 千万别忘写！！！
-			}
-		})
-	})
-	
-
-	
-	return web
-	
-
-},
-
-//发布评论
-push_comment(qid,content){
+//发表评论
+push_comment(qid,user_id,content){
 	var web = new Promise((resolve, reject) => {
 		uni.request({
 			url: url + "push_comment",
 			data:{
 				qid:qid,
+				user_id:user_id,
 				content:content
 			},
 			success: (res) => {
@@ -330,6 +307,174 @@ push_comment(qid,content){
 	
 
 },
+
+
+
+//获取评论
+get_comment(qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "get_comment",
+			data:{
+				qid:qid,
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+//添加互动
+react(get_id,push_id,qid,type){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "react",
+			data:{
+				get_id:get_id,
+				push_id:push_id,
+				qid:qid,
+				type:type,
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+//添加评论互动
+react_comment(get_id,push_id,qid,content,type){
+	console.log(content)
+	console.log(12123132113232)
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "react_comment",
+			data:{
+				get_id:get_id,
+				push_id:push_id,
+				qid:qid,
+				content:content,
+				type:type,
+	
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+	
+	
+	return web
+},
+
+
+
+
+//获取互动
+get_react(user_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "get_react",
+			data:{
+				user_id:user_id
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+
+//获取未读信息
+count_react(user_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "count_react",
+			data:{
+				user_id:user_id
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
+//设为已读
+is_read(user_id){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "is_read",
+			data:{
+				user_id:user_id
+
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+
+	
+	return web
+	
+
+},
+
+
  
 
 }

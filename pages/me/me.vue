@@ -32,10 +32,10 @@
 		
 	
 		<uv-list>
-		    <uv-list-item title="我的出题" @click="linkTo()" clickable></uv-list-item>
-			<uv-list-item title="历史做题记录" clickable></uv-list-item>
-			<uv-list-item title="我的收藏" @click="linkTo('../star/star')" clickable></uv-list-item>
-			<uv-list-item title="我的互动" clickable></uv-list-item>
+		    <uv-list-item title="我的出题" @click="linkTo()" clickable link></uv-list-item>
+			<uv-list-item title="历史做题记录" clickable link></uv-list-item>
+			<uv-list-item title="我的收藏" @click="linkTo('../star/star')" clickable link></uv-list-item>
+			<uv-list-item title="我的互动" @click="linkToReact()" clickable link :show-badge="true" :badge="{value: this.count}"></uv-list-item>
 		</uv-list> 
 		
 		<uv-button type="error" style="width:300px;margin:10px auto" @click="logout">退出登录</uv-button>
@@ -54,17 +54,30 @@
 				id:"",
 				pwd:"",
 				user_name:"",
+				count:"", //未读信息
 				
 			}
 		},
-		onLoad(){
+		async onShow(){
+			console.log("test")
+			console.log(sessionStorage.getItem('user_id'))
+			this.user_name = sessionStorage.getItem('user_id')
+			if(sessionStorage.getItem('user_id') == ''){
+				this.$store.state.isLoggedIn = false
+			}
+			else{
+				this.$store.state.isLoggedIn = true
+			}
 			
+			
+			
+			this.count = await api.count_react(this.user_name)
+			this.count = this.count[0][0]
+			console.log(this.count)
 			console.log(this.$store.state.isLoggedIn) 
 			this.user_name = sessionStorage.getItem('user_id')
 
-			if(sessionStorage.getItem('is_log') == 'true'){
-				this.$store.state.isLoggedIn = true
-			}
+			
 			
 		},
 		methods: {
@@ -93,6 +106,8 @@
 					sessionStorage.setItem('is_log', 'true');  
 					sessionStorage.setItem('user_id', this.id);  
 					this.user_name = this.id
+					this.count = await api.count_react(this.user_name)
+					this.count = this.count[0][0]
 				}
 				
 				console.log(this.$store.state.isLoggedIn)
@@ -118,6 +133,13 @@
 				});
 				
 				
+			},
+			async linkToReact(){
+				api.is_read(this.user_name)
+				
+				uni.navigateTo({
+					url:'../react/react'
+				})
 			}
 		}
 	}

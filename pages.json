@@ -137,6 +137,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/react/react",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
