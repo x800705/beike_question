@@ -364,6 +364,35 @@ react(get_id,push_id,qid,type){
 
 },
 
+//添加评论互动
+react_comment(get_id,push_id,qid,content,type){
+	console.log(content)
+	console.log(12123132113232)
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "react_comment",
+			data:{
+				get_id:get_id,
+				push_id:push_id,
+				qid:qid,
+				content:content,
+				type:type,
+	
+			},
+			success: (res) => {
+				var result = res.data
+	
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+	
+	
+	return web
+},
+
 
 
 

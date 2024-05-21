@@ -59,6 +59,17 @@
 			}
 		},
 		async onShow(){
+			console.log("test")
+			console.log(sessionStorage.getItem('user_id'))
+			this.user_name = sessionStorage.getItem('user_id')
+			if(sessionStorage.getItem('user_id') == ''){
+				this.$store.state.isLoggedIn = false
+			}
+			else{
+				this.$store.state.isLoggedIn = true
+			}
+			
+			
 			
 			this.count = await api.count_react(this.user_name)
 			this.count = this.count[0][0]
@@ -66,9 +77,7 @@
 			console.log(this.$store.state.isLoggedIn) 
 			this.user_name = sessionStorage.getItem('user_id')
 
-			if(sessionStorage.getItem('is_log') == 'true'){
-				this.$store.state.isLoggedIn = true
-			}
+			
 			
 		},
 		methods: {

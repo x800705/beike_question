@@ -35,11 +35,15 @@
 
 	
 	
-	<view class="content">
+	<view class="content" style="margin-bottom: 20px;">
 
 
-
-			<text class="title" style="margin-top:40px">{{q}}</text> 
+			
+			
+			<text class="title" style="margin-top:40px">
+				
+				<view>{{q}}</view>
+			</text> 
 			
 			  
 			
@@ -101,7 +105,7 @@
 				</view>
 				
 				
-				
+				<view style="color: gray; font-size: 15px; text-align: left;position: relative;top:-10px">本题由 {{q_user_id}} 提供</view>
 				
 	
 			</view>
@@ -121,7 +125,7 @@
 	<uv-list>
 	
 
-			<uv-list-item title="评论区"  @click="link_comment()" clickable link style="padding:10px 10px;background-color: rgb(230, 230, 230);">
+			<uv-list-item title="评论区"  @click="link_comment()" clickable link style="padding:10px 10px;background-color: rgb(230, 230, 230);width:100%;position: fixed;bottom: 50px;">
 				<view >评论区</view>
 			</uv-list-item>
 
@@ -897,9 +901,9 @@
 			},
 			
 			link_comment(){
-				console.log(this.qid)
+				console.log(this.q_user_id)
 				uni.navigateTo({
-					url:'../comment/comment?qid=' + this.qid
+					url:'../comment/comment?qid=' + this.qid +"&q_user_id=" + this.q_user_id
 				});
 			
 			}

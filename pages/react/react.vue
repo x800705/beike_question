@@ -4,7 +4,9 @@
 			<view style="padding-top: 20px;">
 				<view style="color:gray;font-size: 12px;" v-if="item[1] == 'heart'">{{item[0]}} 对你发布的提问点赞了</view>
 				<view style="color:gray;font-size: 12px;" v-else-if="item[1] == 'star'">{{item[0]}} 对你发布的提问收藏了</view>
+				<view style="color:gray;font-size: 12px;" v-else-if="item[1] == 'comment'">{{item[0]}} 对你发布的提问评论了</view>
 				<view>{{item[2]}}</view>
+				<view v-if="item[1] == 'comment'">[评论:]  {{item[3]}}</view>
 			</view>
 			
 			

@@ -38,11 +38,13 @@
 				user_id:"",
 				content:"",
 				comment_list:[],
+				q_user_id:"",
 			}
 		},
 		onLoad(res){
 			this.user_id = sessionStorage.getItem('user_id')
 			this.qid = res.qid
+			this.q_user_id = res.q_user_id
 			
 			this.get_commit()
 			
@@ -56,8 +58,11 @@
 				var data = await api.push_comment(this.qid,this.user_id,this.content)
 				if(data == "200"){
 					config.success_alerts("已发送")
+					
+					//添加互动 get_id,push_id,qid,type
+					api.react_comment(this.q_user_id,this.user_id,this.qid,this.content,"comment")
+					//更新评论 
 					this.content = ""
-					//更新评论
 					this.get_commit()
 				}
 				else{
