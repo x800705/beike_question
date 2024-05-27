@@ -2,9 +2,9 @@
 	<view>
 		<uv-list  v-for="(item,index) in react_list" :key="index">
 			<view style="padding-top: 20px;">
-				<view style="color:gray;font-size: 12px;" v-if="item[1] == 'heart'">{{item[0]}} 对你发布的提问点赞了</view>
-				<view style="color:gray;font-size: 12px;" v-else-if="item[1] == 'star'">{{item[0]}} 对你发布的提问收藏了</view>
-				<view style="color:gray;font-size: 12px;" v-else-if="item[1] == 'comment'">{{item[0]}} 对你发布的提问评论了</view>
+				<view style="color:gray;font-size: 12px;display:flex" v-if="item[1] == 'heart'"> <uv-icon name="heart" size="20"> </uv-icon> {{item[0]}} 对你发布的提问点赞了</view>
+				<view style="color:gray;font-size: 12px;display:flex" v-else-if="item[1] == 'star'">  <uv-icon name="star" size="20"> </uv-icon> {{item[0]}} 对你发布的提问收藏了</view>
+				<view style="color:gray;font-size: 12px;display:flex" v-else-if="item[1] == 'comment'"><uv-icon name="chat" size="20"> </uv-icon> {{item[0]}} 对你发布的提问评论了 </view>
 				<view>{{item[2]}}</view>
 				<view v-if="item[1] == 'comment'">[评论:]  {{item[3]}}</view>
 			</view>
@@ -12,7 +12,7 @@
 			
 		</uv-list>
 	</view>
-</template>
+</template> 
 
 <script>
 	import api from "../../api/api.js"

@@ -145,14 +145,44 @@ get_is_star(user_id,qid){
 },
 
 //根据种类获取题目
-getitemr(item_id){
+getitemr(item_id,qid){
 	var web = new Promise((resolve, reject) => {
 		uni.request({
 			url: url + "getitemr",
 			data:{
-				item_id:item_id
+				item_id:item_id,
+				qid:qid
 			},
-			success: (res) => {
+			success: (res) => {	
+				var result = res.data
+				if(result == null){
+					uni.showToast({
+						    title: '该分类题库为空',  
+							icon: 'none',  
+						    duration: 2000 // 持续显示，直到手动隐藏  
+					});
+				}
+				
+				
+				resolve(result);  // 千万别忘写！！！
+			}
+		})
+	})
+	
+	
+	return web
+},
+
+//个性化推荐
+recoment(user_id,qid){
+	var web = new Promise((resolve, reject) => {
+		uni.request({
+			url: url + "recoment",
+			data:{
+				user_id:user_id,
+				qid:qid
+			},
+			success: (res) => {	
 				var result = res.data
 				if(result == null){
 					uni.showToast({
@@ -367,7 +397,6 @@ react(get_id,push_id,qid,type){
 //添加评论互动
 react_comment(get_id,push_id,qid,content,type){
 	console.log(content)
-	console.log(12123132113232)
 	var web = new Promise((resolve, reject) => {
 		uni.request({
 			url: url + "react_comment",

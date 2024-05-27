@@ -124,7 +124,7 @@
 	
 	<uv-list>
 	
-
+			
 			<uv-list-item title="评论区"  @click="link_comment()" clickable link style="padding:10px 10px;background-color: rgb(230, 230, 230);width:100%;position: fixed;bottom: 50px;">
 				<view >评论区</view>
 			</uv-list-item>
@@ -185,9 +185,16 @@
 		
 		
 		async onPullDownRefresh() {
-		
+			this.user_id = sessionStorage.getItem('user_id');
+			
 			//根据种类获取题目
-			var data = await api.getitemr(this.item_id)
+			if(this.item_id == -1){
+				var data = await api.recoment(this.user_id,this.qid)
+			}
+			else{
+				var data = await api.getitemr(this.item_id,this.qid)
+			}
+			
 			
 			//初始化
 			this.is_click = 0;
@@ -316,7 +323,7 @@
 			//this.qid = this.$route.query.id
 			//获取url的id
 			
-			console.log(123)
+		
 			
 			//获取登录人id
 			this.user_id = sessionStorage.getItem('user_id');
@@ -349,22 +356,58 @@
 				})
 			})
 		
+		
+		
+			var data = await api.recoment(this.user_id,this.qid)
 			
 			
-			//获取随机数
-			await new Promise((resolve, reject) => {
-					uni.request({
-						url:this.url + "/getitemr?item_id=" + this.item_id,
-						success:(res)=>{
-							console.log("res")
-							console.log(res.data[0])
-							this.qid = res.data[0]
+			//初始化
+			this.is_click = 0;
+			this.is_pdis = 0;
+			
+			
+			this.chooseList = ["","","",""]; //选项选择
+			this.styleList = ["1","2","3","4"]; //样式选择
+			this.peaList = ["0","0","0","0"];
+			this.percentList = ["0%","0%","0%","0%"];
+			
+			this.chooseList = []
+			this.q = ""
+			
+			//设置题目
+			this.qid = data[0]
+			this.q_user_id = data[3]
+			this.q = data[4]
+			this.chooseList = data.slice(5,9)	
+			this.ans = data[9]
+			this.star_count = data[15]
+			this.heart_count = data[16]
+			
+			//判断是否收藏
+			this.is_star = await api.get_is_star(sessionStorage.getItem("user_id"),this.qid)
+			this.is_heart = false
+			
+			
+			
+			
+			//随机获取种类的题目
+			// await new Promise((resolve, reject) => {
+			// 		uni.request({
+			// 			url:this.url + "/getitemr?item_id=" + this.item_id,
+			// 			data:{
+			// 				item_id:this.item_id,
+			// 				qid:0
+			// 			},
+			// 			success:(res)=>{
+			// 				console.log("res")
+			// 				console.log(res.data[0])
+			// 				this.qid = res.data[0]
 							
-							resolve('suc');  // 千万别忘写！！！
-						}
-					})
+			// 				resolve('suc');  // 千万别忘写！！！
+			// 			}
+			// 		})
 					
-				})
+			// 	})
 			
 			
 			
@@ -377,7 +420,7 @@
 
 			
 			//发送请求 根据id来进行题目的渲染
-			await this.getq()
+			//await this.getq()
 			
 
 			
@@ -422,9 +465,19 @@
 				this.item_id = a.id
 				
 				
+				//个性化推荐
+				if(this.item_id == -1){
+					var data = await api.recoment(this.user_id,this.qid)
+				}
 				
-				//根据种类获取题目
-				var data = await api.getitemr(this.item_id)
+				else{
+					//根据种类获取题目
+					var data = await api.getitemr(this.item_id,0)
+				}
+		
+				
+				
+				
 				
 				//初始化
 				this.is_click = 0;
@@ -479,6 +532,7 @@
 						success: (res) => {
 							
 							res = res.data[0]
+							this.q_user_id = res[3]
 							this.q = res[4]
 							this.chooseList = res.slice(5,9)
 							

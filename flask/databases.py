@@ -425,7 +425,34 @@ def getitemr():
 	
     return json.dumps(data)
     
+
+# #个性化推荐
+# @app.route("/recoment",methods=['POST','GET'])
+# def recoment():
+#     db = MySQLdb.connect(host=host, user=user, passwd=password, db=database)
+#     cursor = db.cursor()
     
+#     user_id = request.values.get("user_id")
+    
+    
+#     cursor.execute('''select * from que where id in 
+# 	(select qt.qid from 
+# 	(select * from user_star where user_id = 
+# 	(select user_id from user_star 
+# 	where qid = 
+# 	(select t.qid from 
+# 	(select qid,(select heart from que where id = qid) as count from user_star where user_id = %s ORDER BY `count` DESC limit 1) as t ) and user_id != %s limit 1)) as qt)''')
+
+ 
+   
+	
+	
+	#查询结果 只查一个
+    data = cursor.fetchone()
+	
+	
+	
+    return json.dumps(data)
 
 #登录贝壳刷题
 @app.route("/logins",methods=['POST','GET'])

@@ -106,7 +106,7 @@
         	"path" : "pages/addOne/addOne",
         	"style" : 
         	{
-        		"navigationBarTitleText" : "",
+        		"navigationBarTitleText" : "我要出题",
         		"enablePullDownRefresh" : false
         	}
         }
